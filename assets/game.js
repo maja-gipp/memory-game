@@ -43,17 +43,29 @@ const pickRandom = (array, quantity) => {
 };
 
 const generateGame = () => {
-  const dimensions = selectors.board.getAttribute("data-dimension");
+  const sizeAttribute = selectors.board.getAttribute("data-size");
+  if (sizeAttribute === null) {
+    throw new Error("Missing data-size attribute");
+  }
+  const size = Number(sizeAttribute);
 
-  if (dimensions % 2 !== 0) {
-    throw new Error("The dimension of the board must be an even number.");
+  if (isNaN(size)) {
+    throw new Error("The size of the board must be a number");
+  }
+
+  if (size < 2) {
+    throw new Error("The size of the board must be at least 2");
+  }
+
+  if (size % 2 !== 0) {
+    throw new Error("The size of the board must be an even number.");
   }
 
   const emojis = ["🐍", "🐘", "🐇", "🦔", "🦜", "🐈‍⬛", "🦒", "🦭", "🦧", "🦀"];
-  const picks = pickRandom(emojis, (dimensions * dimensions) / 2);
+  const picks = pickRandom(emojis, (size * size) / 2);
   const items = shuffle([...picks, ...picks]);
   const cards = `
-        <div class="board" style="grid-template-columns: repeat(${dimensions}, auto)">
+        <div class="board" style="grid-template-columns: repeat(${size}, auto)">
             ${items
               .map(
                 (item) => `
