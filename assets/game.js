@@ -29,15 +29,14 @@ const shuffle = (array) => {
   return clonedArray;
 };
 
-const pickRandom = (array, items) => {
+const pickRandom = (array, quantity) => {
   const clonedArray = [...array];
   const randomPicks = [];
 
-  for (let index = 0; index < items; index++) {
+  for (let index = 0; index < quantity; index++) {
     const randomIndex = Math.floor(Math.random() * clonedArray.length);
-
-    randomPicks.push(clonedArray[randomIndex]);
-    clonedArray.splice(randomIndex, 1);
+    const randomElement = clonedArray.splice(randomIndex, 1)[0];
+    randomPicks.push(randomElement);
   }
 
   return randomPicks;
