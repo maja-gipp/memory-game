@@ -10,7 +10,7 @@ const selectors = {
 const state = {
   gameStarted: false,
   flippedCards: 0,
-  totalFlips: 0,
+  totalMoves: 0,
   totalTime: 0,
   loop: null,
 };
@@ -91,7 +91,7 @@ const startGame = () => {
   state.loop = setInterval(() => {
     state.totalTime++;
 
-    selectors.moves.innerText = `${state.totalFlips} moves`;
+    selectors.moves.innerText = `${state.totalMoves} moves`;
     selectors.timer.innerText = `time: ${state.totalTime} sec`;
   }, 1000);
 };
@@ -105,28 +105,33 @@ const flipBackCards = () => {
 };
 
 const flipCard = (card) => {
-  state.flippedCards++;
-  state.totalFlips++;
+  if (state.flippedCards === 2) {
+    return;
+  }
 
   if (!state.gameStarted) {
     startGame();
   }
 
-  if (state.flippedCards <= 2) {
+  if (state.flippedCards < 2) {
     card.classList.add("flipped");
+    state.flippedCards++;
   }
 
   if (state.flippedCards === 2) {
-    const flippedCards = document.querySelectorAll(".flipped:not(.matched)");
+    state.totalMoves++;
+    const [firstCard, secondCard] = document.querySelectorAll(
+      ".flipped:not(.matched)"
+    );
 
-    if (flippedCards[0].innerText === flippedCards[1].innerText) {
-      flippedCards[0].classList.add("matched");
-      flippedCards[1].classList.add("matched");
+    if (firstCard.innerText === secondCard.innerText) {
+      firstCard.classList.add("matched");
+      secondCard.classList.add("matched");
     }
 
     setTimeout(() => {
       flipBackCards();
-    }, 1000);
+    }, 3000);
   }
 
   if (!document.querySelectorAll(".card:not(.flipped)").length) {
@@ -135,7 +140,7 @@ const flipCard = (card) => {
       selectors.win.innerHTML = `
                 <span class="win-text">
                     You won!<br />
-                    with <span class="highlight">${state.totalFlips}</span> moves<br />
+                    with <span class="highlight">${state.totalMoves}</span> moves<br />
                     under <span class="highlight">${state.totalTime}</span> seconds
                 </span>
             `;
