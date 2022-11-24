@@ -41,3 +41,26 @@ button {
 .board-container {
     position: relative;
 }
+.board,
+.win {
+    border-radius: 5px;
+    box-shadow: 0 25px 50px rgb(33 33 33 / 25%);
+    background: linear-gradient(135deg,  #6f00fc 0%,#fc7900 50%,#fcc700 100%);
+    transition: transform .6s cubic-bezier(0.4, 0.0, 0.2, 1);
+    backface-visibility: hidden;
+}
+
+.board {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    grid-gap: 20px;
+}
+
+.board-container.flipped .board {
+    transform: rotateY(180deg) rotateZ(50deg);
+}
+
+.board-container.flipped .win {
+    transform: rotateY(0) rotateZ(0);
+}
